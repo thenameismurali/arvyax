@@ -1,49 +1,36 @@
+// src/pages/Register.js
 import { useState } from 'react';
 import api from '../api';
-import { useNavigate } from 'react-router-dom';
-import '../style.css';
 
 export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
+  const handleRegister = async () => {
     try {
-      await api.post('/auth/register', { email, password });
-      alert('Registered successfully! Now login.');
-      navigate('/login');
+      await api.post('/register', { email, password });
+      alert('Registered successfully!');
     } catch (err) {
-      console.error(err);
-      alert('Register failed.');
+      console.error(err.response?.data || err.message);
+      alert('Register failed!');
     }
   };
 
   return (
-    <div className="container">
-      <div className="form-box">
-        <h2>Register</h2>
-        <form onSubmit={handleRegister}>
-          <input
-            type="email"
-            placeholder="Email"
-            maxLength="40"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            maxLength="20"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            required
-          />
-          <button type="submit">Register</button>
-        </form>
-      </div>
+    <div className="register-page">
+      <h2>Register</h2>
+      <input
+        placeholder="Email"
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+      />
+      <button onClick={handleRegister}>Register</button>
     </div>
   );
 }
